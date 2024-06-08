@@ -1,15 +1,15 @@
 import intrinsicTags from '@/intrinsicTags';
 import { Component, Tw, UnknownPropsWithClassName } from '@/types';
-import { createStyledComponentFactory } from '@/util';
+import { createFactoryOfType } from '@/util';
 
 // prettier-ignore
 const tw = (
 	<C extends Component<UnknownPropsWithClassName>>
-	(component: C) => createStyledComponentFactory(component)
+	(component: C) => createFactoryOfType(component)
 ) as Tw;
 
 intrinsicTags.forEach((tag) => {
-	tw[tag] = createStyledComponentFactory(tag);
+	tw[tag] = createFactoryOfType(tag);
 });
 
 export default tw;

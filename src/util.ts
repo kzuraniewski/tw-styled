@@ -1,12 +1,10 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import cn from '@/lib/cn';
 import {
 	isTemplateArgumentPrimitive,
 	StyleableElementType,
-	UnknownProps,
-	TemplateArgument,
 	TemplateResolver,
-	Component,
+	StyledComponentFactory,
 } from '@/types';
 
 export const resolveTemplate: TemplateResolver = (
@@ -27,21 +25,20 @@ export const resolveTemplate: TemplateResolver = (
 		.join(' ');
 };
 
-export const createStyledComponentFactory =
-	<Type extends StyleableElementType>(type: Type) =>
-	<CustomProps extends UnknownProps = undefined>(
-		classes: TemplateStringsArray,
-		...args: TemplateArgument<React.ComponentProps<Type> & CustomProps>[]
-	) =>
-		forwardRef<Type, React.ComponentProps<Type> & CustomProps>(
-			(props, ref) => {
-				const { className: externalClasses, ...other } = props;
-				const parsedClasses = resolveTemplate(props, classes, ...args);
+export const createFactoryOfType = <Type extends StyleableElementType>(
+	type: Type
+) => {
+	const factory: StyledComponentFactory<Type> =
+		(classes, ...args) =>
+		(props) => {
+			const { className: externalClasses, ...other } = props;
+			const parsedClasses = resolveTemplate(props, classes, ...args);
 
-				return React.createElement(type, {
-					className: cn(parsedClasses, externalClasses),
-					ref,
-					...other,
-				});
-			}
-		) as Component<React.ComponentProps<Type>>;
+			return React.createElement(type, {
+				className: cn(parsedClasses, externalClasses),
+				...other,
+			});
+		};
+
+	return factory;
+};

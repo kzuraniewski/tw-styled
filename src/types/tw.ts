@@ -6,25 +6,25 @@ import {
 } from './react';
 import { TemplateArgument } from './template';
 
-export type StyledComponentFactory<Props extends UnknownPropsWithClassName> = <
-	CustomProps extends UnknownProps = object
->(
-	classes: TemplateStringsArray,
-	...args: TemplateArgument<Props & CustomProps>[]
-) => Component<Props & CustomProps>;
-
 export type StyleableComponent = Component<UnknownPropsWithClassName>;
 
 export type StyleableElementType = StyleableComponent | IntrinsicTag;
 
+export type StyledComponentFactory<Type extends StyleableElementType> = <
+	CustomProps extends UnknownProps = object
+>(
+	classes: TemplateStringsArray,
+	...args: TemplateArgument<React.ComponentProps<Type> & CustomProps>[]
+) => Component<React.ComponentProps<Type> & CustomProps>;
+
 // prettier-ignore
 export type TwFunction =
-	<Props extends UnknownPropsWithClassName>
-	(component: Component<Props>) =>
-		StyledComponentFactory<Props>;
+	<Type extends StyleableElementType>
+	(type: Type) =>
+		StyledComponentFactory<Type>;
 
 export type TwProperties = {
-	[K in IntrinsicTag]: StyledComponentFactory<JSX.IntrinsicElements[K]>;
+	[Tag in IntrinsicTag]: StyledComponentFactory<Tag>;
 };
 
 export type Tw = TwFunction & TwProperties;
