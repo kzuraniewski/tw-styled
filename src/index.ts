@@ -1,11 +1,11 @@
 import intrinsicTags from '@/intrinsicTags';
-import { Component, Tw, UnknownPropsWithClassName } from '@/types';
 import { createFactoryOfType } from '@/util';
+import { StyleableElementType, Tw } from '@/types';
 
 // prettier-ignore
 const tw = (
-	<C extends Component<UnknownPropsWithClassName>>
-	(component: C) => createFactoryOfType(component)
+	<Type extends StyleableElementType>
+	(type: Type) => createFactoryOfType(type)
 ) as Tw;
 
 intrinsicTags.forEach((tag) => {
