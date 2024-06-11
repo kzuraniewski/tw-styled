@@ -19,7 +19,7 @@ export type TemplateArgument<Context> =
 	| TemplateArgumentPrimitive;
 
 export type TemplateResolver = <Context>(
-	param: Context,
+	context: Context,
 	classes: TemplateStringsArray,
 	...args: TemplateArgument<Context>[]
 ) => string;
